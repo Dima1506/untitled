@@ -4,6 +4,7 @@
 #include <sstream>
 #include <set>
 #include <map>
+#include <iomanip>
 
 using namespace std;
 class Date {
@@ -90,22 +91,20 @@ bool operator<(const Date& lhs, const Date& rhs){
 class Database {
 public:
     void AddEvent(const Date& date, const string& event){
-        set <string> temp=dt[date];
-        temp.insert(event);
-        dt[date]=temp;
+        dt[date].insert(event);
     }
     bool DeleteEvent(const Date& date, const string& event){
-        set <string> temp=dt[date];
-        temp.erase(event);
-        dt[date]=temp;
-        if(dt[date].size()==0){
-            dt.erase(date);
+        if (dt.at(date).count(event) == 1) {
+            dt[date].erase(event);
+            return true;
         }
+        else return false;
+
     }
     int  DeleteDate(const Date& date){
-        int n=dt[date].size();
+        int q = dt.at(date).size();
         dt.erase(date);
-        return n;
+        return q;
     }
 
     void Find(const Date& date) {
@@ -121,7 +120,8 @@ public:
 
     void Print() const{
         for(auto& p:dt){
-            cout<<p.first.GetYear()<<"-"<<p.first.GetMonth()<<"-"<<p.first.GetDay()<<" ";
+            cout.fill('0');
+            cout<<setw(4)<<p.first.GetYear()<<"-"<<setw(2)<<p.first.GetMonth()<<"-"<<setw(2)<<p.first.GetDay()<<" ";
             for(auto&  o:p.second){
                 cout<<o<<" ";
             }
@@ -154,6 +154,9 @@ int main() {
                 db.AddEvent(Date(date),event);
             }else if(command2=="Del") {
                 st >> date >> event;
+                if(date==""){
+                    throw runtime_error("Wrong date format: " + date);
+                }
                 if (event == "") {
                     cout << "Deleted " << db.DeleteDate(Date(date)) << " events\n";
                 } else {
@@ -161,8 +164,9 @@ int main() {
                     if (io != "") {
                         throw runtime_error("Unknown command: " + command);
                     }
-                    db.DeleteEvent(Date(date), event);
-                    cout << "Deleted successfully\n";
+                    if(db.DeleteEvent(Date(date), event)) {
+                        cout << "Deleted successfully\n";
+                    }
                 }
             }
             else if(command2=="Find"){
