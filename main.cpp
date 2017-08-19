@@ -145,6 +145,9 @@ int main() {
             st>>command2;
             if(command2=="Add"){
                 st>>date>>event>>io;
+                if(date==""){
+                    throw runtime_error("Wrong date format: " + date);
+                }
                 if(event=="" || io!=""){
                     throw runtime_error("Unknown command: "+command2);
                 }
