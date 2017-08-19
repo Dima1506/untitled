@@ -10,42 +10,27 @@ using namespace std;
 class Date {
 public:
     Date(string st){
-        bool ka=false,ka2=false;
+        int l=0;
         stringstream t;
         int year,month,day;
         if(st[0]=='-' || st[st.length()-1]=='-'){
             throw runtime_error("Wrong date format: "+st);
         }
-        for(int i=0;i<st.size();i++) {
-            if(st[i]=='-'&& st[i+1]=='-'){
-                throw runtime_error("Wrong date format: " + st);
-            }
-            if (!ka && st[i] != '-') {
-                if (!(st[i] >= '0' && st[i] <= '9')) {
-                    cout<<"t";
-                    throw runtime_error("Wrong date format: " + st);
-                }
-            } else {
-                if (!ka) {
-                    ka = !ka;
+        for(int i=0;i<st.length();i++){
+            if(st[i]!='-'){
+                if(!('0'<=st[i] && st[i]<='9')) {
+                    throw runtime_error("Wrong date format: "+st);
                 }
             }
-            if (!ka2 && ka && st[i] != '-') {
-                if (!(st[i] >= '0' && st[i] <= '9')) {
-                    cout<<"p";
-                    throw runtime_error("Wrong date format: " + st);
+            else{
+                if(st[i+1]=='-'){
+                    throw runtime_error("Wrong date format: "+st);
                 }
-            } else {
-                if (!ka2) {
-                    ka2 = !ka2;
-                }
+                l++;
             }
-            if (ka2 && ka && st[i] != '-') {
-                if (!(st[i] >= '0' && st[i] <= '9')) {
-                    cout<<"r";
-                    throw runtime_error("Wrong date format: " + st);
-                }
-            }
+        }
+        if(l!=2){
+            throw runtime_error("Wrong date format: "+st);
         }
         t<<st;
         t>>year;
