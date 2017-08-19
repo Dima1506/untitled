@@ -169,8 +169,10 @@ int main() {
                     throw runtime_error("Unknown command: "+command);
                 }
                 db.Find(Date(date));
-            }else if(command2=="Print"){
+            }else if(command2=="Print") {
                 db.Print();
+            }else if(command2==""){
+
             } else{
                 throw runtime_error("Unknown command: "+command2);
             }
